@@ -67,7 +67,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     private SimpleExoPlayer mExoPlayer;
     private SimpleExoPlayerView mPlayerView;
     private MediaSessionCompat mMediaSession;
-    private PlaybackStateCompat.Builder mStateBuilder
+    private PlaybackStateCompat.Builder mStateBuilder;
 
 
     @Override
@@ -337,22 +337,22 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public void onPlay() {
-            
+            mExoPlayer.setPlayWhenReady(true);
         }
 
         @Override
         public void onPause() {
-            super.onPause();
+            mExoPlayer.setPlayWhenReady(false);
         }
 
         @Override
         public void onSkipToPrevious() {
-            super.onSkipToPrevious();
+            mExoPlayer.seekTo(0);
         }
 
         @Override
         public void onSkipToNext() {
-            super.onSkipToNext();
+            mExoPlayer.seekTo(1);
         }
     }
 }
