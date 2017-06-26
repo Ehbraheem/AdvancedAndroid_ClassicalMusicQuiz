@@ -201,7 +201,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
         int icon;
         String play_pause;
-        if(state.getState() == PlaybackStateCompat.STATE_PLAYING){
+        if (state.getState() == PlaybackStateCompat.STATE_PLAYING) {
             icon = R.drawable.exo_controls_pause;
             play_pause = getString(R.string.pause);
         } else {
@@ -209,31 +209,35 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
             play_pause = getString(R.string.play);
         }
 
-
         NotificationCompat.Action playPauseAction = new NotificationCompat.Action(
                 icon, play_pause,
-                MediaButtonReceiver.buildMediaButtonPendingIntent(this,
-                        PlaybackStateCompat.ACTION_PLAY_PAUSE));
+                MediaButtonReceiver.buildMediaButtonPendingIntent(
+                        this, PlaybackStateCompat.ACTION_PLAY_PAUSE ));
 
-        NotificationCompat.Action restartAction = new android.support.v4.app.NotificationCompat
-                .Action(R.drawable.exo_controls_previous, getString(R.string.restart),
-                MediaButtonReceiver.buildMediaButtonPendingIntent
-                        (this, PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS));
+        NotificationCompat.Action restartAction = new NotificationCompat.Action(
+                R.drawable.exo_controls_previous, getString(R.string.restart),
+                MediaButtonReceiver.buildMediaButtonPendingIntent(
+                        this, PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS ));
 
-        PendingIntent contentPendingIntent = PendingIntent.getActivity
-                (this, 0, new Intent(this, QuizActivity.class), 0);
+        NotificationCompat.Action nextAction = new NotificationCompat.Action(
+                R.drawable.exo_controls_next, getString(R.string.next),
+                MediaButtonReceiver.buildMediaButtonPendingIntent(
+                        this, PlaybackStateCompat.ACTION_SKIP_TO_NEXT));
+
+        PendingIntent contentPendingIntent = PendingIntent.getActivity(
+                this, 0, new Intent(this, QuizActivity.class), 0);
 
         builder.setContentTitle(getString(R.string.guess))
-                .setContentText(getString(R.string.notification_text))
                 .setContentIntent(contentPendingIntent)
+                .setContentText(getString(R.string.notification_text))
                 .setSmallIcon(R.drawable.ic_music_note)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .addAction(restartAction)
                 .addAction(playPauseAction)
+                .addAction(nextAction)
+                .addAction(restartAction)
                 .setStyle(new NotificationCompat.MediaStyle()
                         .setMediaSession(mMediaSession.getSessionToken())
                         .setShowActionsInCompactView(0,1));
-
 
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotificationManager.notify(0, builder.build());
@@ -426,6 +430,11 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void onSkipToPrevious() {
             mExoPlayer.seekTo(0);
+        }
+
+        @Override
+        public void onSkipToNext() {
+            mExoPlayer.seekTo(1);
         }
     }
 
